@@ -1,0 +1,168 @@
+<html>
+
+<head>
+    <!-- PyScript: https://github.com/pyscript/pyscript/releases -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.05.1/pyscript.css" />
+    <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
+    <!-- Bootstrap: https://getbootstrap.com -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- local Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <py-config>
+        packages = []
+        [[fetch]]
+        files = ["./main.py", "./mancala_minimax/board.py", "./mancala_minimax/minimax.py"]
+    </py-config>
+</head>
+
+<body>
+    <!-- Healthy Spacing -->
+    <br>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col logo-flex-col">
+                    <img onclick="window.location.href = 'https://jtexpo.github.io'" src="../assets/images/jtexpo.png" alt="" class="logo-img">
+                    <a href="https://jtexpo.github.io" class="display-3 logo-main-text">JTexpo</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="display-4 text-center">
+                        <a href="https://www.youtube.com/@JTexpo" target="_blank" class="logo-sub-text">
+                            Content To Tr<span style="color: #F3AF56;">AI</span>n Your Brain
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Healthy Spacing -->
+    <br>
+    <br>
+    <!-- Graph RNN -->
+    <main>
+        <div class = "container">
+            <!-- Board -->
+            <div class="row">
+                <div class="col-sm-4 info-header h2" id="held_marbles">
+                    Held Marbles:
+                </div>
+                <div class="col-sm-4 info-header h2" id="turn">
+                    Turn:
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2" id="turn">
+                    <button class="btn btn-success btn-block" py-click="reset()">New Game</button>
+                </div>
+            </div>
+            <div class="row board">
+                <div class="col-sm-2 board-end-zone">
+                    <div class="h2 end-zone-header">AI's Score:</div>
+                    <div class="display-4 end-zone-points-ai" id="ai_score"></div>
+                </div>
+                <div class="col-sm-8">
+                    <div class = "row">
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-ai btn-block" id="top_0"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-ai btn-block" id="top_1"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-ai btn-block" id="top_2"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-ai btn-block" id="top_3"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-ai btn-block" id="top_4"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-ai btn-block" id="top_5"></button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class = "row">
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-player btn-block" id="bottom_0" py-click="player_move(0)"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-player btn-block" id="bottom_1" py-click="player_move(1)"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-player btn-block" id="bottom_2" py-click="player_move(2)"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-player btn-block" id="bottom_3" py-click="player_move(3)"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-player btn-block" id="bottom_4" py-click="player_move(4)"></button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-dark btn-player btn-block" id="bottom_5" py-click="player_move(5)"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 board-end-zone">
+                    <div class="h2 end-zone-header">Your Score:</div>
+                    <div class="display-4 end-zone-points-player" id="player_score"></div>
+                </div>
+
+            </div>
+            <!-- Healthy Spacing -->
+            <br>
+            <br>
+            <br>
+            <!-- Explination -->
+            <!-- How to use this app -->
+            <div class="row">
+                <div class="h2 info-header">How to use this app</div>
+            </div>
+            <div class="row">
+                <div class="h4 info-body">
+                    Mancala is a classic board game with roots tracing back to ancient Egypt. 
+                    The objective is to strategically move marbles (represented by numbers) counter-clockwise into your score zones. <br><br>
+                    If you score with your last marble, you get an extra turn. 
+                    Additionally, if you drop a marble on an empty tile while a parallel tile is filled with marbles, you can collect both! <br><br>
+                    On this website, you always have the first move. 
+                    Click on the light purple numbers to submit your move. 
+                    When you're done, simply click the 'New Game' button to reset the board. <br><br>
+                </div>
+            </div>
+            <!-- What is a RNN -->
+            <div class="row">
+                <div class="h2 info-header">What is Mini-Max?</div>
+            </div>
+            <div class="row">
+                <div class="h4 info-body">
+                    The Mini-Max algorithm is a powerful tool in artificial intelligence used to determine the most strategic moves in a game. <br><br>
+                    It works by simultaneously minimizing the player's chances of winning while maximizing the AI's score. 
+                    This is achieved through a series of depth-first searches, evaluating various outcomes to identify the most likely successful path. <br><br>
+                    While Mini-Max is highly effective, it can be memory-intensive due to the numerous branching paths it explores. 
+                    As a result, for some complex games, Mini-Max may not be able to envision the entire game from start to finish.
+                    Instead, it looks a certain number of moves ahead of its opponent to make informed decisions. <br><br>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Healthy Spacing -->
+    <br>
+    <br>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class = "row">
+                <div class = "col text-center">
+                    <div class="h4 footer-rights">&copy; 2023 Justin Tyler Esposito. All rights reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <py-script src="./main.py"></py-script>
+</body>
+
+</html>
